@@ -1,7 +1,6 @@
 import json
 import glob
 import matplotlib.pyplot as plt
-import os
 
 
 # ----------------------
@@ -9,26 +8,22 @@ import os
 # ----------------------
 tweets = []
 
-files = sorted(glob.glob("trump_tweet_data_archive-master/master_*.json"))
+files = sorted(glob.glob("trump_tweet_data_archive-master/condensed_*.json"))
 
 for filename in files:
     print(f"Loading: {filename}")
     with open(filename, "r", encoding="utf8") as f:
         data = json.load(f)
 
-        if isinstance(data, list):
-            tweets.extend(data)
-
-        elif isinstance(data, dict):
-            if "tweets" in data:
-                tweets.extend(data["tweets"])
-            elif "data" in data:
-                tweets.extend(data["data"])
+        for tweet in data:
+            if "text" in tweet:
+                tweets.append(tweet["text"])
             else:
-                tweets.append(data)
+                tweets.append(tweet)
 
 total = len(tweets)
 print("len(tweets) =", total)
+#print(tweets)
 
 # ----------------------
 # phrases to count
@@ -51,7 +46,7 @@ phrases = [
 counts = {p: 0 for p in phrases}
 
 for tweet in tweets:
-    text = str(tweet.get("text", "")).lower()
+    text = tweet.lower()
     for phrase in phrases:
         if phrase in text:
             counts[phrase] += 1
