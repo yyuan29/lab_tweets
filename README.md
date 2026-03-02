@@ -17,3 +17,5 @@
 
 ## Image
 ![Program Output](plot.png)
+
+**Description:** This bar chart also shows my results. 
